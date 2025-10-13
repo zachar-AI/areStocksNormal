@@ -72,7 +72,7 @@ if valid:
         kurt_msg = ('the distribution has "normal" weight in the tails '
         'This indicates the returns follow a normal distribution')
     else:
-        kurt_msg = ('the distribution has heavy 🦍 tails because the stock has frequent extreme price moves. '
+        kurt_msg = ('the distribution has heavy 🦍 tails because the stock has extreme price moves. '
         'This is likely due to earnings reports and investors reacting to breaking news! '
         'This indicates the returns do not follow a normal distribution')
 
