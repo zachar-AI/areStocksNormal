@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 import streamlit as st
+import statsmodels.api as sm
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 from datetime import date
@@ -86,6 +87,7 @@ if valid:
             'This means that stocks have extreme moves ocassionally but not all the time\n'
             'We can measure tail weight with excess kurtosis which is 0 for a normal distribution.\n\n'
             f'The excess kurtosis for the observed data is {ex_kurt:.2f} which means {kurt_msg}')
+
     st.markdown('#')
     fig, ax = plt.subplots()
     ax.hist(data['return'])
@@ -114,3 +116,7 @@ if valid:
         })
     data_summary.set_index('description', inplace=True)
     st.table(data_summary)
+
+    fig = plt.figure()
+    sm.qqplot(data['return'], line='45', ax=fig.add_subplot(111))
+    st.pyplot(fig) 
