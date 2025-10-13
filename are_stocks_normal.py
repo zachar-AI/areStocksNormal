@@ -3,6 +3,7 @@ import numpy as np
 import yfinance as yf
 import streamlit as st
 import matplotlib.pyplot as plt
+from matplotlib.ticker import PercentFormatter
 from datetime import date
 
 # TITLE
@@ -53,13 +54,13 @@ if valid:
 
     skew = np.power((data['return'] - mu)/std, 3).sum()*n/((n-1)*(n-2))
     if skew < -0.5:
-        skew_msg = ('the distribution has a long left tail because people were panic selling! '
+        skew_msg = ('the distribution has a long left tail because people were panic selling!📉🫨 '
         'This indicates the returns do not follow a normal distribution')
     elif skew < 0.5:
         skew_msg = ('the distribution is relatively symetric '
         'This indicates the returns follow a normal distribution')
     else:
-        skew_msg = ('the distribution has a long right tail because people are euphoric buying! '
+        skew_msg = ('the distribution has a long right tail because people are euphoric buying!🚀 '
         'This indicates the returns do not follow a normal distribution')
 
     ex_kurt = np.power((data['return'] - mu)/std, 4).sum()*n*(n+1)/((n-1)*(n-2)*(n-3)) - 3*(n-1)**2 / ((n-2)*(n-3))
@@ -70,7 +71,7 @@ if valid:
         kurt_msg = ('the distribution has "normal" weight in the tails '
         'This indicates the returns follow a normal distribution')
     else:
-        kurt_msg = ('the distribution has heavy 🦍 tails because the stock has extreme price moves up and down. '
+        kurt_msg = ('the distribution has heavy 🦍 tails because the stock has frequent extreme price moves. '
         'This is likely due to earnings reports and investors reacting to breaking news! '
         'This indicates the returns do not follow a normal distribution')
 
@@ -90,7 +91,8 @@ if valid:
     ax.hist(data['return'])
     ax.set_title(ui_ticker + " " + ui_interval + " returns")
     ax.set_xlabel(ui_interval + " stock returns")
-    ax.set_ylabel("frequency")
+    ax.set_ylabel("number of returns in bucket")
+    ax.xaxis.set_major_formatter(PercentFormatter(1.0))
     st.pyplot(fig)
 
     st.markdown('#')
