@@ -49,6 +49,8 @@ if valid:
 
     # PERFORM ANALYSIS
     mu = data['return'].mean()
+    biggest_gain = data['return'].max()
+    biggest_loss = data['return'].min()
     n = len(data)
     var = np.power(data['return'] - mu, 2).sum()/(n-1)
     std = np.sqrt(var)
@@ -77,6 +79,34 @@ if valid:
         'This indicates the returns do not follow a normal distribution')
 
     # DISPLAY RESULTS
+
+    # Data Summary
+    st.markdown('#')
+    st.write('Quick Look at Data Pulled for Study')
+    data_summary = pd.DataFrame({
+        'description': ['Number of Data Points', 
+                        'First Data Point', 
+                        'Last Data Point', 
+                        'Interval of Returns',
+                        'Average Return',
+                        'Standard Deviation of Return', 
+                        f'Bigest {ui_interval} Gain', 
+                        f'Biggest {ui_interval} Loss'],
+        'value': [str(n), 
+                  str(data.index[0].date()),
+                  str(data.index[-1].date()),
+                  ui_interval,
+                  f'{mu:.2%}',
+                  f'{std:.2%}',
+                  f'{biggest_gain:.2%}',
+                  f'{biggest_loss:.2%}'
+                  ]
+        })
+    data_summary.set_index('description', inplace=True)
+    st.table(data_summary)
+
+
+    #  Histogram Look
     st.markdown('#')
     st.subheader('Do the returns look like a bell curve?')
     st.text('Note that a bell curve should be symetric meaning it should be a mirror image of itself.\n'
@@ -88,7 +118,6 @@ if valid:
             'We can measure tail weight with excess kurtosis which is 0 for a normal distribution.\n\n'
             f'The excess kurtosis for the observed data is {ex_kurt:.2f} which means {kurt_msg}')
 
-    st.markdown('#')
     fig, ax = plt.subplots()
     ax.hist(data['return'])
     ax.set_title(ui_ticker + " " + ui_interval + " returns")
@@ -97,26 +126,34 @@ if valid:
     ax.xaxis.set_major_formatter(PercentFormatter(1.0))
     st.pyplot(fig)
 
-    st.markdown('#')
-    st.write('Data Summary')
-    data_summary = pd.DataFrame({
-        'description': ['number of data points', 
-                        'first data point', 
-                        'last data point', 
-                        'interval of returns',
-                        'average return',
-                        'standard deviation of return'],
-        'value': [str(n), 
-                  str(data.index[0].date()),
-                  str(data.index[-1].date()),
-                  ui_interval,
-                  f'{mu:.2%}',
-                  f'{std:.2%}'
-                  ]
-        })
-    data_summary.set_index('description', inplace=True)
-    st.table(data_summary)
 
+    # Q Q Plot
+    st.markdown('#')
+    st.subheader('Now let\'s look at a Q-Q plot?')
+    data['n_return'] = (data['return'] - mu) / std
     fig = plt.figure()
-    sm.qqplot(data['return'], line='45', ax=fig.add_subplot(111))
+    sm.qqplot(data['n_return'], line='45', ax=fig.add_subplot(111))
     st.pyplot(fig) 
+    
+    st.text('What is a Q-Q plot though?!?\n\n'
+            'In Short:\n'
+            'If the data follow a 45° line, that\'s evidence that'
+            ' the data follow a normal distribution. '
+            'Otherwise we have evidence that the distribution does not follow a normal distribution.\n\n'
+            'In detail:\n'
+            'A Q-Q plot is a plot of theoretical quantiles pulled from a perfectly normal distribution'
+            ' plotted against quantiles from the observed distribution after standardization. '
+            'Standardization subtracts the mean and divides by the standard deviation. '
+            'This makes it so each return is expressed in how many standard deviations it is away from the mean. '
+            'Standardization makes it so when we plot these against each other '
+            'they should follow a 45° line (y=x). '
+            'Note that for a normal distribution 99.7% of the data should '
+            'fall within 3 standard deviations of the mean '
+            'so data outside of that range are considered outliers. '
+            'Seeing many outliers will be reflected by high excess kurtosis '
+            'and indicates that the distribution is not normal.'
+            )
+
+
+
+
