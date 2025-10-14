@@ -13,7 +13,12 @@ st.markdown('#')
 
 # USER INPUT
 col1, col2 = st.columns(2)
-ui_ticker = col1.selectbox('Pick a stock ticker', ['^GSPC', 'AAPL', 'GOOG', 'TSLA', 'BTC-USD', 'ETH-USD'])
+ui_ticker = col1.selectbox('Pick a stock ticker', 
+                           ['^GSPC', 'QQQ', 'EFA', 
+                            'MSFT', 'META', 'AAPL', 'NFLX', 'GOOG', 'ORCL', 'TSLA',
+                            'JPM', 'BRK-A', 'KKR', 'V',
+                            'COST', 'PEP', 'WMT',
+                            'BTC-USD', 'ETH-USD'])
 
 intervals = ['1d', '1wk', '1mo', '3mo']
 ui_interval = col2.selectbox('Pick a time interval', intervals, index=1)
@@ -51,6 +56,9 @@ if valid:
     mu = data['return'].mean()
     biggest_gain = data['return'].max()
     biggest_loss = data['return'].min()
+    biggest_gain_date = data['return'].idxmax()
+    biggest_loss_date = data['return'].idxmin()
+
     n = len(data)
     var = np.power(data['return'] - mu, 2).sum()/(n-1)
     std = np.sqrt(var)
@@ -85,21 +93,26 @@ if valid:
     st.write('Quick Look at Data Pulled for Study')
     data_summary = pd.DataFrame({
         'description': ['Number of Data Points', 
+                        'Interval of Returns',
                         'First Data Point', 
                         'Last Data Point', 
-                        'Interval of Returns',
-                        'Average Return',
-                        'Standard Deviation of Return', 
                         f'Bigest {ui_interval} Gain', 
-                        f'Biggest {ui_interval} Loss'],
+                        f'Bigest {ui_interval} Gain Start Date', 
+                        f'Biggest {ui_interval} Loss',
+                        f'Biggest {ui_interval} Loss Start Date',
+                        'Average Return',
+                        'Standard Deviation of Return'
+                        ],
         'value': [str(n), 
+                  ui_interval,
                   str(data.index[0].date()),
                   str(data.index[-1].date()),
-                  ui_interval,
-                  f'{mu:.2%}',
-                  f'{std:.2%}',
                   f'{biggest_gain:.2%}',
-                  f'{biggest_loss:.2%}'
+                  str(biggest_gain_date.date()),
+                  f'{biggest_loss:.2%}',
+                  str(biggest_loss_date.date()),
+                  f'{mu:.2%}',
+                  f'{std:.2%}'
                   ]
         })
     data_summary.set_index('description', inplace=True)
