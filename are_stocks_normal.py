@@ -191,7 +191,7 @@ if valid:
 
             'On the contrary, the null hypothesis to test for normality '
             'is that the observed data does follow a normal a distribution. ' 
-            'So here we are hoping to accept the null hypothesis. '
+            'So here we are hoping to fail to reject the null hypothesis. '
             'As our sample size increases, we become more likely to reject the null hypothesis because '
             'variance decreases and even small deviances from normality will cause us to reject the null hypothesis.'
             )
