@@ -69,7 +69,7 @@ if valid:
         skew_msg = ('the distribution has a long left tail because people were panic selling!📉🫨 '
         'This indicates the returns do not follow a normal distribution')
     elif skew < 0.5:
-        skew_msg = ('the distribution is relatively symetric '
+        skew_msg = ('the distribution is relatively symmetric '
         'This indicates the returns follow a normal distribution')
     else:
         skew_msg = ('the distribution has a long right tail because people are euphoric buying!🚀 '
@@ -123,8 +123,8 @@ if valid:
     #  Histogram Look
     st.markdown('#')
     st.subheader('Do the returns look like a bell curve?')
-    st.text('Note that a bell curve should be symetric meaning it should be a mirror image of itself.\n'
-            'We can measure symetry with skewness which is 0 for a symmetric distribution.\n\n'
+    st.text('Note that a bell curve should be symmetric meaning it should be a mirror image of itself.\n'
+            'We can measure symmetry with skewness which is 0 for a symmetric distribution.\n\n'
             f'The skew for the observed data is {skew:.2f} which means {skew_msg}')
     st.text('')
     st.text('Note that a bell curve should have a medium amount of weight in its tails.\n'
