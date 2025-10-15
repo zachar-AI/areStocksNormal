@@ -241,7 +241,7 @@ if valid:
 
                 Here are a few specific examples of real-world implications:
 
-                ### Black-Sholes Option Pricing and Greeks Calulcation ###
+                ### Black-Sholes Option Pricing and Greeks Calculation ###
                 The Black-Scholes model and the differential equations used to calculate option Greeks 
                 assume that stock returns follow a normal distribution. 
                 Violations of this assumption can lead to mispricing, 
