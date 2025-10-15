@@ -213,6 +213,7 @@ if valid:
 
     st.subheader('Okay, Let\'s see the results')
     st.text(
+            f'Sample Size for Reference: {n}\n\n'
             'Kolmogorov Smirnov Test for Normality:\n'
             'Compares the observed cumulative distribution of the data with '
             'the cumulative distribution for a normal distribution. '
