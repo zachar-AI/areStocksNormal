@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 from datetime import date
 from scipy import stats
+from scipy.special import erfinv
 
 # TITLE
 st.title('Do Stock Returns Follow a Normal Distribution (AKA Bell Curve🔔)?')
@@ -22,7 +23,7 @@ ui_ticker = col1.selectbox('Pick a stock ticker',
                             'BTC-USD', 'ETH-USD'])
 
 intervals = ['1d', '1wk', '1mo', '3mo']
-ui_interval = col2.selectbox('Pick a time interval', intervals, index=1)
+ui_interval = col2.selectbox('Pick a time interval (nonoverlapping jumps)', intervals, index=1)
 
 col1, col2, col3, col4 = st.columns(4)
 curr_year = date.today().year
@@ -123,7 +124,7 @@ if valid:
     #  Histogram Look
     st.markdown('#')
     st.subheader('Do the returns look like a bell curve?')
-    st.text('Note that a bell curve should be symmetric meaning it should be a mirror image of itself.\n'
+    st.text('Note that a bell curve should be symmetric.\n'
             'We can measure symmetry with skewness which is 0 for a symmetric distribution.\n\n'
             f'The skew for the observed data is {skew:.2f} which means {skew_msg}')
     st.text('')
@@ -132,12 +133,19 @@ if valid:
             'We can measure tail weight with excess kurtosis which is 0 for a normal distribution.\n\n'
             f'The excess kurtosis for the observed data is {ex_kurt:.2f} which means {kurt_msg}')
 
-    fig, ax = plt.subplots()
-    ax.hist(data['return'])
-    ax.set_title(ui_ticker + " " + ui_interval + " returns")
-    ax.set_xlabel(ui_interval + " stock returns")
-    ax.set_ylabel("number of returns in bucket")
-    ax.xaxis.set_major_formatter(PercentFormatter(1.0))
+    perfectly_normal_data = mu + std * np.sqrt(2) * erfinv(2 * (np.arange(1, n + 1) - 0.5) / n - 1)
+
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+    axes[0].hist(data['return'])
+    axes[0].set_title("Observed Data")
+
+    axes[1].hist(perfectly_normal_data)
+    axes[1].set_title("Perfectly Normal Bell Curve")
+
+    for ax in axes:
+        ax.set_xlabel(ui_interval + " stock returns")
+        ax.set_ylabel("number of returns in bucket")
+        ax.xaxis.set_major_formatter(PercentFormatter(1.0))
     st.pyplot(fig)
 
 
