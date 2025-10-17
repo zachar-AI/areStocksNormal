@@ -151,7 +151,7 @@ if valid:
 
     # Q Q Plot
     st.markdown('#')
-    st.subheader('Now let\'s look at a Q-Q plot?')
+    st.subheader('Now let\'s look at a Q-Q plot')
     data['s_return'] = (data['return'] - mu) / std
     fig = plt.figure()
     sm.qqplot(data['s_return'], line='45', ax=fig.add_subplot(111))
