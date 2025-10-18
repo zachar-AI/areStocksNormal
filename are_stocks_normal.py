@@ -35,7 +35,7 @@ ui_start_year = col2.selectbox('Start Year of study', years, index=0)
 ui_end_month = col3.selectbox('End Month of study', months, index=curr_month-1)
 ui_end_year = col4.selectbox('End Year of study', years, index=len(years)-1)
 ui_start = date(ui_start_year, ui_start_month, 1)
-ui_end = date(ui_end_year, ui_end_month, 1)
+ui_end = date(ui_end_year, ui_end_month, 28)
 
 # PULL DATA
 data = yf.download(ui_ticker, interval=ui_interval, start=ui_start, end=ui_end, auto_adjust=True)
